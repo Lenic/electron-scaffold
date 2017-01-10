@@ -1,29 +1,16 @@
-import { app, remote } from 'electron'
+import { app, remote, Menu } from 'electron'
 import path from 'path'
 import url from 'url'
+import DevMenu from './menus/dev_menu.es6'
+import FileMenu from './menus/file_menu.es6'
 import createWindow from 'utils/createWindow.es6'
+import logic from './logic/index.es6'
 
-const installExtensions = () => {
-  if (process.env.NODE_ENV === 'development') {
-    const installer = require('electron-devtools-installer')
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS
-
-    return Promise.all(['REACT_DEVELOPER_TOOLS'].forEach(v => {
-      try {
-        return installer.default(installer[v], forceDownload)
-      } catch (e) {
-        return Promise.reject(e)
-      }
-    }))
-  } else {
-    return Promise.resolve()
-  }
-}
+logic(app)
 
 app.on('ready', function () {
+  setMenus()
   installExtensions()
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log(`An error occurred when add Extension of ${name}:`, err))
 
   var mainWindow = createWindow('main', {
     width: 1000,
@@ -44,3 +31,28 @@ app.on('ready', function () {
 app.on('window-all-closed', function () {
   return app.quit()
 })
+
+const installExtensions = () => {
+  if (process.env.NODE_ENV === 'development') {
+    const installer = require('electron-devtools-installer')
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS
+    const extensions = ['REACT_DEVELOPER_TOOLS']
+
+    extensions.forEach(v => {
+      try {
+        installer.default(installer[v], forceDownload)
+          .then((name) => console.log(`Added Extension:  ${name}`))
+          .catch((err) => console.log(`An error occurred when add Extension of ${v}:`, err))
+      } catch (e) { }
+    })
+  }
+}
+
+const setMenus = () => {
+  let menus = [FileMenu]
+  if (process.env.NODE_ENV === 'development') {
+    menus.push(DevMenu)
+  }
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menus))
+}
