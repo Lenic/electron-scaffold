@@ -1,10 +1,10 @@
 var webpack = require('webpack')
   , base = require('./config/webpack.base')
-  , deepAssign = require('deep-assign')
+  , merge = require('webpack-merge')
 
-module.exports = deepAssign({}, base(__dirname), {
+module.exports = merge({}, base(__dirname), {
   entry: {
     'main.js': ['./src/client/js/main.jsx', './src/client/css/style.unattached.less'],
-    'background.js': './src/server/index.es6'
-  }
+  },
+  target: 'electron-renderer'
 })

@@ -33,13 +33,12 @@ module.exports = function (dirname) {
       }]
     },
     output: {
-      path: path.join(dirname, 'app'),
+      path: path.join(dirname, 'assets'),
       libraryTarget: 'umd',
       filename: "[name]"
     },
     plugins: [
       new ExtractTextPlugin('style.css')
-    ],
-    target: 'atom'
+    ]
   }
 }
