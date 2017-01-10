@@ -4,17 +4,13 @@
   "description": "electron program scaffold.",
   "main": "./assets/background.js",
   "scripts": {
-    "start": "electron .",
+    "start": "cross-env NODE_ENV=development electron .",
     "clean": "rm -rf dist assets && git clean -fd",
-
     "build:dev-main": "cross-env NODE_ENV=development webpack --progress --watch --config ./webpack.config.main.js",
     "build:dev-render": "cross-env NODE_ENV=development webpack --progress --watch --config ./webpack.config.render.js",
-    "build:dev": "concurrently --kill-others --raw \"npm run build:dev-main\" \"npm run build:dev-render\"",
-    "dev": "concurrently --kill-others --raw \"npm run build:dev\" \"sleep 5 && npm start\"",
-
-    "build:prod-main": "cross-env NODE_ENV=development webpack --progress --config ./webpack.config.main.js",
-    "build:prod-render": "cross-env NODE_ENV=development webpack --progress --config ./webpack.config.render.js",
-
+    "dev": "concurrently --kill-others --raw \"npm run build:dev-main\" \"npm run build:dev-render\" \"sleep 5 && npm start\"",
+    "build:prod-main": "cross-env NODE_ENV=production webpack --progress --config ./webpack.config.main.js",
+    "build:prod-render": "cross-env NODE_ENV=production webpack --progress --config ./webpack.config.render.js",
     "dist": "concurrently --kill-others --raw \"npm run build:prod-main\" \"npm run build:prod-render\"",
     "pack:publish": "npm run clean && npm run dist && build --publish never",
     "pack": "build --dir"
