@@ -1,11 +1,15 @@
-import { ipcMain, BrowserWindow } from 'electron'
+import { ipcMain } from 'electron'
 
-let result = {
-  server: ipcMain
+export default function register(target) {
+  let keys = Object.keys(target)
+  keys.forEach(key => {
+    if (key.indexOf('$') === 0) {
+      exec(key, target)
+    }
+  })
 }
 
-Object.defineProperty(result, 'sender', {
-  get: () => BrowserWindow.getFocusedWindow().webContents
-})
-
-module.exports = result
+function exec(key, target) {
+  ipcMain.on(key, (event, payload) =>
+    target[key].call(target, result => event.sender.send(key, result), payload))
+}

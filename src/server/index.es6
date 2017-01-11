@@ -1,14 +1,14 @@
-import { app, remote, Menu } from 'electron'
+import { app } from 'electron'
 import path from 'path'
 import url from 'url'
-import DevMenu from './menus/dev_menu.es6'
-import FileMenu from './menus/file_menu.es6'
+
 import createWindow from 'utils/createWindow.es6'
+
+import setMenus from './menus/index.es6'
 import logic from './logic/index.es6'
 
-logic(app)
-
 app.on('ready', function () {
+  logic()
   setMenus()
   installExtensions()
 
@@ -46,13 +46,4 @@ const installExtensions = () => {
       } catch (e) { }
     })
   }
-}
-
-const setMenus = () => {
-  let menus = [FileMenu]
-  if (process.env.NODE_ENV === 'development') {
-    menus.push(DevMenu)
-  }
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menus))
 }

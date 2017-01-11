@@ -1,5 +1,4 @@
-import { app } from 'electron'
-import {server} from 'utils/server.es6'
+import { app, ipcRender } from 'electron'
 
 export default {
   label: '&File',
@@ -7,7 +6,7 @@ export default {
     {
       label: '&Open',
       accelerator: 'CmdOrCtrl+O',
-      click: () => server.emit('open-file')
+      click: () => ipcRender.send({ $type: '$open_file' })
     },
     {
       label: '&Quit',

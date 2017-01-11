@@ -1,7 +1,7 @@
-import fileHandler from './file-handler.es6'
+import register from 'utils/server.es6'
 
-export default app => {
-  app.on('ready', () => {
-    fileHandler(app)
-  })
+import FileHandler from './file-handler.es6'
+
+module.exports = function () {
+  register(FileHandler)
 }

@@ -1,8 +1,7 @@
-import {server, sender} from 'utils/server.es6'
 import { BrowserWindow, dialog } from 'electron'
 
-export default app => {
-  server.on('open-file', (event) => {
+export default {
+  $open_file: function (done) {
     let activeWindow = BrowserWindow.getFocusedWindow()
       , opts = {
         title: '打开文件',
@@ -12,7 +11,7 @@ export default app => {
       }
 
     dialog.showOpenDialog(activeWindow, opts, files => {
-      sender.send('opened-file', files[0])
+      done(files && files.length && files[0])
     })
-  })
+  }
 }
